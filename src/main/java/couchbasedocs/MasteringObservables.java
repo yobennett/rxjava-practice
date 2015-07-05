@@ -1,11 +1,13 @@
 package couchbasedocs;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
 import rx.observables.BlockingObservable;
+import rx.observables.GroupedObservable;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -226,9 +228,33 @@ public class MasteringObservables {
 
 	}
 
+	public static void groupBy() {
+
+		Observable
+				.just(1, 2, 3, 4, 5)
+				.groupBy(new Func1<Integer, Boolean>() {
+					@Override
+					public Boolean call(Integer integer) {
+						return integer % 2 == 0;
+					}
+				})
+				.subscribe(new Action1<GroupedObservable<Boolean, Integer>>() {
+					@Override
+					public void call(GroupedObservable<Boolean, Integer> grouped) {
+						grouped.toList().subscribe(new Action1<List<Integer>>() {
+							@Override
+							public void call(List<Integer> integers) {
+								System.out.println(integers + " (Even: " + grouped.getKey() + ")");
+							}
+						});
+					}
+				});
+
+	}
+
 
 	public static void main(String[] args) throws Exception {
-		scan();
+		groupBy();
 	}
 
 }
