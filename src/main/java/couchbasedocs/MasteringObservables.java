@@ -252,9 +252,18 @@ public class MasteringObservables {
 
 	}
 
+	public static void filter() {
+
+		Observable
+				.just(1, 2, 3, 4, 5)
+				.filter(integer -> integer > 2)
+				.subscribe(System.out::println);
+
+	}
+
 
 	public static void main(String[] args) throws Exception {
-		groupBy();
+		filter();
 	}
 
 }
