@@ -1,13 +1,12 @@
 package couchbasedocs;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func2;
 import rx.observables.BlockingObservable;
 import rx.observables.GroupedObservable;
+import rx.schedulers.Schedulers;
 
 import java.util.List;
 import java.util.Random;
@@ -324,8 +323,29 @@ public class MasteringObservables {
 
 	}
 
+	public static void withoutScheduler() {
+		Observable
+				.range(1, 5)
+				.map(integer -> {
+					System.out.println("Map: (" + Thread.currentThread().getName() + ")");
+					return integer + 2;
+				})
+				.subscribe(integer -> System.out.println("got " + integer + "(" + Thread.currentThread().getName() + ")"));
+	}
+
+	public static void subscribeScheduler() {
+		Observable
+				.range(1, 5)
+				.map(integer -> {
+					System.out.println("Map: (" + Thread.currentThread().getName() + ")");
+					return integer + 2;
+				})
+				.subscribeOn(Schedulers.computation())
+				.subscribe(integer -> System.out.println("got " + integer + "(" + Thread.currentThread().getName() + ")"));
+	}
+
 	public static void main(String[] args) throws Exception {
-		retryWithBackoff();
+		subscribeScheduler();
 	}
 
 }
