@@ -5,6 +5,7 @@ import rx.Subscriber;
 import rx.functions.Action1;
 import rx.observables.BlockingObservable;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -127,8 +128,31 @@ public class MasteringObservables {
 
 	}
 
+	public static void blockingObservableInsteadOfLatch() {
+
+		Observable.interval(1, TimeUnit.SECONDS)
+				.take(5)
+				.toBlocking()
+				.forEach(new Action1<Long>() {
+					@Override
+					public void call(Long aLong) {
+						System.out.println("got " + aLong);
+					}
+				});
+
+	}
+
+	public static List<Integer> emittedValuesToList() {
+
+		return Observable
+				.just(1, 2, 3, 4, 5, 6, 7)
+				.toList()
+				.toBlocking()
+				.single();
+	}
+
 	public static void main(String[] args) throws Exception {
-		blockingObservable();
+		System.out.println("list " + emittedValuesToList());
 	}
 
 }
