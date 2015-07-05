@@ -3,6 +3,7 @@ package couchbasedocs;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
+import rx.observables.BlockingObservable;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -111,8 +112,23 @@ public class MasteringObservables {
 
 	}
 
+	public static void blockingObservable() {
+
+		BlockingObservable<Long> observable = Observable
+				.interval(1, TimeUnit.SECONDS)
+				.toBlocking();
+
+		observable.forEach(new Action1<Long>() {
+			@Override
+			public void call(Long aLong) {
+				System.out.println("got " + aLong);
+			}
+		});
+
+	}
+
 	public static void main(String[] args) throws Exception {
-		asyncToSyncWithLatch();
+		blockingObservable();
 	}
 
 }
