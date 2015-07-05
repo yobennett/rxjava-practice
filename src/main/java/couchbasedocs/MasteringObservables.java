@@ -75,7 +75,19 @@ public class MasteringObservables {
 
 					@Override
 					public void onNext(Integer integer) {
-						System.out.println("got: "  + integer);
+						System.out.println("got: " + integer);
+					}
+				});
+
+	}
+
+	public static void subscribeAction() {
+
+		Observable.just(1, 2, 3)
+				.subscribe(new Action1<Integer>() {
+					@Override
+					public void call(Integer integer) {
+						System.out.println("got " + integer);
 					}
 				});
 
@@ -90,6 +102,9 @@ public class MasteringObservables {
 
 		// take(5)
 		take5();
+
+		// simple subscribe action
+		subscribeAction();
 	}
 
 }
