@@ -151,8 +151,54 @@ public class MasteringObservables {
 				.single();
 	}
 
+	public static void blockingObservableWithCreate() {
+		Observable.create(new Observable.OnSubscribe<Integer>() {
+			@Override
+			public void call(Subscriber<? super Integer> subscriber) {
+
+				try {
+					if (!subscriber.isUnsubscribed()) {
+						for (int i = 0; i < 5; i++) {
+							subscriber.onNext(i);
+						}
+						subscriber.onCompleted();
+					}
+				} catch (Exception e) {
+					subscriber.onError(e);
+				}
+
+			}
+		}).subscribe(new Action1<Integer>() {
+			@Override
+			public void call(Integer integer) {
+				System.out.println("got " + integer);
+			}
+		});
+
+	}
+
+	public static void blockingObservableWithCreateLambda() {
+
+		Observable.create(subscriber -> {
+
+			try {
+				if (!subscriber.isUnsubscribed()) {
+					for (int i = 0; i < 5; i++) {
+						subscriber.onNext(i);
+					}
+					subscriber.onCompleted();
+				}
+			} catch (Exception e) {
+				subscriber.onError(e);
+			}
+
+		}).subscribe(System.out::println);
+
+	}
+
+
 	public static void main(String[] args) throws Exception {
-		System.out.println("list " + emittedValuesToList());
+		blockingObservableWithCreateLambda();
 	}
 
 }
