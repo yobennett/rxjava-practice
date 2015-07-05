@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 public class MasteringObservables {
 
+	final static Observable<Integer> evens = Observable.just(2, 4, 6, 8, 10);
+	final static Observable<Integer> odds = Observable.just(1, 3, 5, 7, 9);
+
 	public static void consumeObservable() {
 
 		Observable.just(1, 2, 3)
@@ -261,9 +264,23 @@ public class MasteringObservables {
 
 	}
 
+	public static void merge() {
+
+		Observable
+				.merge(evens, odds)
+				.subscribe(System.out::println);
+
+	}
+
+	public static void zip() {
+		Observable
+				.zip(evens, odds, (v1, v2) -> v1 + " " + v2 + " is: " + (v1 + v2))
+				.subscribe(System.out::println);
+	}
+
 
 	public static void main(String[] args) throws Exception {
-		filter();
+		zip();
 	}
 
 }
