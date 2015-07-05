@@ -3,6 +3,7 @@ package couchbasedocs;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.observables.BlockingObservable;
 
 import java.util.List;
@@ -196,9 +197,28 @@ public class MasteringObservables {
 
 	}
 
+	public static void fizzBuzz() {
+
+		Observable
+				.interval(10, TimeUnit.MILLISECONDS)
+				.take(20)
+				.map(i -> {
+					if (i % 3 == 0) {
+						return "Fizz";
+					} else if (i % 5 == 0) {
+						return "Buzz";
+					} else {
+						return Long.toString(i);
+					}
+				})
+				.toBlocking()
+				.forEach(System.out::println);
+
+	}
+
 
 	public static void main(String[] args) throws Exception {
-		blockingObservableWithCreateLambda();
+		fizzBuzz();
 	}
 
 }
