@@ -4,6 +4,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.functions.Func2;
 import rx.observables.BlockingObservable;
 
 import java.util.List;
@@ -216,9 +217,18 @@ public class MasteringObservables {
 
 	}
 
+	public static void scan() {
+
+		Observable
+				.just(1, 2, 3)
+				.scan((sum, value) -> sum + value)
+				.subscribe(System.out::println);
+
+	}
+
 
 	public static void main(String[] args) throws Exception {
-		fizzBuzz();
+		scan();
 	}
 
 }
