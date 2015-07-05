@@ -4,6 +4,9 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Action1;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 public class MasteringObservables {
 
 	public static void consumeObservable() {
@@ -93,18 +96,23 @@ public class MasteringObservables {
 
 	}
 
-	public static void main(String[] args) {
-		// simple observable
-		consumeObservable();
+	public static void asyncToSyncWithLatch() throws InterruptedException {
 
-		// test onError
-		testOnError();
+		final CountDownLatch latch = new CountDownLatch(5);
+		Observable.interval(1, TimeUnit.SECONDS)
+				.subscribe(new Action1<Long>() {
+					@Override
+					public void call(Long aLong) {
+						latch.countDown();
+						System.out.println("got " + aLong);
+					}
+				});
+		latch.await();
 
-		// take(5)
-		take5();
+	}
 
-		// simple subscribe action
-		subscribeAction();
+	public static void main(String[] args) throws Exception {
+		asyncToSyncWithLatch();
 	}
 
 }
